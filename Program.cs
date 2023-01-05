@@ -1,3 +1,6 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Project1.Data;
 namespace Project1
 {
     public class Program
@@ -5,6 +8,8 @@ namespace Project1
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<UserContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Project1Context") ?? throw new InvalidOperationException("Connection string 'Project1Context' not found.")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -28,7 +33,7 @@ namespace Project1
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Registration}/{action=Register}/{id?}");
 
             app.Run();
         }
